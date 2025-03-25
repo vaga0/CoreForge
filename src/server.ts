@@ -1,4 +1,4 @@
-import express, { Application } from 'express';
+import express, { Application, Request, Response, NextFunction } from 'express';
 import http from 'http';
 import https from 'https';
 import fs from 'fs';
@@ -13,6 +13,14 @@ app.use(express.json());
 
 // 動態載入所有模組的路由
 registerRoutes(app);
+
+// 錯誤處理中間件(While JSON format error)
+app.use((err: any, req: Request, res: Response, next: NextFunction): any => {
+  if (err instanceof SyntaxError && 'body' in err) {
+    return res.status(400).json({ error: 'Invalid JSON format：' + err.message });
+  }
+  next(err);
+});
 
 // HTTP 伺服器
 const httpServer = http.createServer(app);
