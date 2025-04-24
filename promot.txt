@@ -1,0 +1,39 @@
+# promot for grok 3
+```text
+這是我 typescript 專案的架構
+CoreForge/
+├── src/
+│   ├── modules/              # 模組化功能存放處
+│   │   ├── example/          # 範例模組
+│   │   │   ├── example.controller.ts
+│   │   │   ├── example.service.ts
+│   │   │   └── example.routes.ts
+│   │   └── [其他模組]/      # 未來添加的模組
+│   ├── config/               # 配置檔案
+│   │   └── server.config.ts
+│   ├── server.ts             # 主程式進入點
+│   └── types/                # 自定義 TypeScript 型別
+│       └── index.ts
+├── .env                      # 環境變數檔案
+├── tsconfig.json             # TypeScript 配置
+├── package.json              # 專案依賴與腳本
+
+#server.ts
+...
+import { registerRoutes } from './modules';
+const app: Application = express();
+app.use(express.json());
+registerRoutes(app);
+...
+
+#modules/index.ts
+import { Application } from 'express';
+import { exampleRoutes } from './example/example.routes'; // 範例模組路由
+
+export function registerRoutes(app: Application) {
+  app.use('/api/example', exampleRoutes);
+  // ... add other modules
+}
+
+新 module 都要照這邏輯開發
+```
